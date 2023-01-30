@@ -50,5 +50,7 @@ android {
         implementation 'androidx.appcompat:appcompat:1.4.1'
         implementation 'com.squareup.okhttp3:okhttp:3.14.9'
         implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+        implementation "androidx.lifecycle:lifecycle-process:2.5.1"
+        implementation "androidx.lifecycle:lifecycle-common:2.5.1"
     }
 }

@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.browser.customtabs.CustomTabColorSchemeParams;
@@ -16,6 +17,12 @@ import androidx.browser.customtabs.CustomTabsCallback;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsService;
 import androidx.browser.customtabs.CustomTabsSession;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.ProcessLifecycleOwner;
 
 import com.pichillilorenzo.flutter_inappwebview.R;
 import com.pichillilorenzo.flutter_inappwebview.types.CustomTabsActionButton;
@@ -29,7 +36,9 @@ import java.util.Map;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
-public class ChromeCustomTabsActivity extends Activity implements MethodChannel.MethodCallHandler {
+
+
+public class ChromeCustomTabsActivity extends Activity implements MethodChannel.MethodCallHandler , LifecycleObserver {
 
   protected static final String LOG_TAG = "CustomTabsActivity";
   public MethodChannel channel;
@@ -52,6 +61,9 @@ public class ChromeCustomTabsActivity extends Activity implements MethodChannel.
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
+
+
 
     setContentView(R.layout.chrome_custom_tabs_layout);
 
@@ -130,6 +142,33 @@ public class ChromeCustomTabsActivity extends Activity implements MethodChannel.
       }
     });
   }
+
+  protected void onResume() {
+    // It will show a message on the screen
+    // then onResume is invoked
+    super.onResume();
+    Toast.makeText(this,"In Foreground",Toast.LENGTH_LONG).show();
+  }
+
+  protected void onPause() {
+    // It will show a message on the screen
+    // then onPause is invoked
+    super.onPause();
+    Toast.makeText(this,"In Background", Toast.LENGTH_LONG).show();
+  }
+
+//
+//  @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+//  public void appInResumeState() {
+//    Toast.makeText(this,"In Foreground",Toast.LENGTH_LONG).show();
+//  }
+//
+//  @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+//  public void appInPauseState() {
+//    Toast.makeText(this,"In Background", Toast.LENGTH_LONG).show();
+//  }
+
+
 
   @Override
   public void onMethodCall(final MethodCall call, final MethodChannel.Result result) {
@@ -267,3 +306,5 @@ public class ChromeCustomTabsActivity extends Activity implements MethodChannel.
     channel.invokeMethod("onChromeSafariBrowserClosed", obj);
   }
 }
+
+
